@@ -1,5 +1,8 @@
+import logging
 from app.core.llm_client import get_llm_client
 from app.core.db import save_message
+
+logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """Si prijazen, strokoven in prepričljiv AI asistent podjetja SpoznajAI.
 Pomagaš obiskovalcem spletne strani spoznaj-ai.si.
@@ -142,14 +145,17 @@ def get_reply(session_id: str, user_message: str) -> str:
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
 
-    response = client.chat.completions.create(
-        model="gpt-5-mini",
-        messages=messages,
-        max_tokens=600,
-        temperature=0.3,
-    )
-
-    reply = response.choices[0].message.content.strip()
+    try:
+        response = client.chat.completions.create(
+            model="gpt-5-mini",
+            messages=messages,
+            max_tokens=600,
+            temperature=0.3,
+        )
+        reply = response.choices[0].message.content.strip()
+    except Exception as e:
+        logger.error(f"OpenAI API error: {e}")
+        raise
     history.append({"role": "assistant", "content": reply})
     save_message(session_id, "assistant", reply)
 
