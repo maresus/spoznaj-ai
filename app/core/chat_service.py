@@ -147,11 +147,14 @@ def get_reply(session_id: str, user_message: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-5-mini",
+            model="gpt-4o-mini",
             messages=messages,
-            max_completion_tokens=600,
+            max_tokens=600,
+            temperature=0.3,
         )
-        reply = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
+        reply = content.strip() if content else "Oprostite, prišlo je do napake. Prosim poskusite znova."
+        logger.info(f"Response: {reply[:100]}...")
     except Exception as e:
         logger.error(f"OpenAI API error: {e}")
         raise
