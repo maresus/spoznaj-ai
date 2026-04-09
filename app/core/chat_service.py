@@ -140,7 +140,14 @@ def stream_reply(session_id: str, user_message: str):
     history.append({"role": "user", "content": user_message})
     save_message(session_id, "user", user_message)
 
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
+    from datetime import datetime
+    _DAYS_SL = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
+    _now = datetime.now()
+    _system = SYSTEM_PROMPT + (
+        f"\n\nDanes je {_DAYS_SL[_now.weekday()]}, {_now.strftime('%-d. %-m. %Y')}. "
+        f"Jutri je {_DAYS_SL[(_now.weekday()+1)%7]}."
+    )
+    messages = [{"role": "system", "content": _system}] + history
 
     full_reply = ""
     stream = client.chat.completions.create(
