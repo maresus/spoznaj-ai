@@ -2,29 +2,31 @@
 <html lang="sl">
 <head>
   <meta charset="UTF-8" />
-  <title>SpoznajAI – Asistent</title>
+  <title>Spoznaj AI · Pomočnik</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #00334a;
-      --primary-dark: #001f2d;
-      --primary-light: #004d6e;
-      --accent: #afd037;
-      --accent-glow: rgba(175, 208, 55, 0.3);
-      --bg-gradient: linear-gradient(135deg, #001f2d 0%, #00334a 100%);
-      --text: #ffffff;
-      --text-muted: rgba(255, 255, 255, 0.6);
-      --bg-card: #00334a;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      --shadow-hover: 0 25px 70px rgba(175, 208, 55, 0.15);
-      --border: rgba(255, 255, 255, 0.1);
-      --user-msg: linear-gradient(135deg, #afd037 0%, #c4e840 100%);
-      --bot-msg: rgba(255, 255, 255, 0.05);
+      --color-brand: #00334a;
+      --color-brand-600: #002a3d;
+      --color-accent: #afd037;
+      --color-paper: #ffffff;
+      --color-paper-soft: #fafaf8;
+      --color-ink: #0a0e12;
+      --color-ink-700: #1a2128;
+      --color-ink-500: #4a5560;
+      --color-ink-400: #6b7682;
+      --color-ink-300: #9aa3ad;
+      --color-ink-200: #d4d8dc;
+      --color-ink-50: #f5f5f3;
+      --hairline: rgba(10,14,18,0.08);
       --radius: 16px;
+      --shadow-card: 0 1px 0 rgba(10,14,18,0.04), 0 24px 48px -24px rgba(10,14,18,0.18);
+      --shadow-hover: 0 1px 0 rgba(10,14,18,0.04), 0 50px 80px -30px rgba(0,51,74,0.30);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       font-size: 16px;
       --app-vh: 100vh;
@@ -32,7 +34,11 @@
 
     body {
       margin: 0; padding: 0;
-      background: var(--bg-gradient);
+      color: var(--color-ink);
+      background: var(--color-paper);
+      background-image:
+        radial-gradient(55% 55% at 82% 18%, rgba(175,208,55,0.18), transparent 70%),
+        radial-gradient(50% 60% at 18% 28%, rgba(0,77,110,0.12), transparent 70%);
       background-attachment: fixed;
       min-height: 100vh;
       display: flex;
@@ -40,81 +46,99 @@
       justify-content: center;
     }
 
-    .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px; }
+    .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 24px; }
 
     .chat-card {
-      background: var(--bg-card);
+      background: var(--color-paper-soft);
+      border: 1px solid var(--hairline);
       border-radius: 24px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       height: 90vh;
-      max-height: 800px;
-      transition: box-shadow 0.3s ease;
+      max-height: 820px;
+      transition: box-shadow 0.4s ease;
     }
     .chat-card:hover { box-shadow: var(--shadow-hover); }
 
     .chat-header {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
-      color: white;
-      padding: 24px 28px;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid var(--hairline);
     }
 
-    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-left { display: flex; align-items: center; gap: 14px; }
 
     .header-icon {
-      width: 56px; height: 56px;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
+      width: 44px; height: 44px;
+      background: var(--color-brand);
+      color: #fff;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      border: 2px solid rgba(255,255,255,0.3);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
     }
 
-    .header-info h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
-    .header-info p { font-size: 0.9rem; opacity: 0.9; }
+    .header-info h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--color-ink);
+    }
+    .header-info p {
+      font-size: 0.82rem;
+      color: var(--color-ink-400);
+      margin-top: 2px;
+    }
 
     .status-badge {
       display: flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      padding: 8px 16px;
+      background: var(--color-ink-50);
+      padding: 6px 12px;
       border-radius: 999px;
-      font-size: 0.85rem;
-      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 0.78rem;
+      color: var(--color-ink-500);
+      border: 1px solid var(--hairline);
     }
 
     .status-dot {
-      width: 8px; height: 8px;
-      background: #10b981;
+      width: 7px; height: 7px;
+      background: var(--color-accent);
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      50% { opacity: 0.45; }
     }
 
     .new-session-btn {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 12px;
+      background: transparent;
+      border: 1px solid var(--hairline);
+      color: var(--color-ink-500);
+      padding: 7px 14px;
+      border-radius: 999px;
       cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 500;
       transition: all 0.2s;
-      backdrop-filter: blur(10px);
+      font-family: inherit;
     }
-    .new-session-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
+    .new-session-btn:hover {
+      background: var(--color-ink-50);
+      color: var(--color-brand);
+      border-color: var(--color-brand);
+    }
+
+    .header-actions { display: flex; gap: 10px; align-items: center; }
 
     .messages-container {
       flex: 1;
@@ -122,148 +146,224 @@
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      background: var(--primary-dark);
+      gap: 14px;
+      background: var(--color-paper-soft);
     }
 
     .messages-container::-webkit-scrollbar { width: 6px; }
     .messages-container::-webkit-scrollbar-track { background: transparent; }
-    .messages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    .messages-container::-webkit-scrollbar-thumb { background: var(--color-ink-200); border-radius: 4px; }
 
-    .message { display: flex; align-items: flex-start; gap: 12px; animation: messageSlide 0.3s ease; }
-    @keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .message { display: flex; align-items: flex-start; gap: 10px; animation: messageSlide 0.3s ease; }
+    @keyframes messageSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     .message.user { flex-direction: row-reverse; }
 
     .message-avatar {
-      width: 32px; height: 32px;
+      width: 30px; height: 30px;
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; flex-shrink: 0;
-      letter-spacing: 0.5px;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+      letter-spacing: 0.4px;
     }
-    .message.bot .message-avatar { background: var(--accent); color: var(--primary-dark); }
-    .message.user .message-avatar { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .message.bot .message-avatar { background: var(--color-brand); color: #fff; }
+    .message.user .message-avatar { background: var(--color-ink-50); color: var(--color-ink-500); border: 1px solid var(--hairline); }
 
     .message-bubble {
-      max-width: 70%;
+      max-width: 72%;
       padding: 12px 16px;
       border-radius: var(--radius);
-      line-height: 1.6;
+      line-height: 1.55;
       font-size: 0.95rem;
       word-wrap: break-word;
     }
-    .message.bot .message-bubble { background: var(--bot-msg); border: 1px solid var(--border); border-bottom-left-radius: 4px; color: rgba(255,255,255,0.9); }
-    .message.user .message-bubble { background: var(--accent); color: var(--primary-dark); font-weight: 500; border-bottom-right-radius: 4px; }
+    .message.bot .message-bubble {
+      background: var(--color-paper);
+      border: 1px solid var(--hairline);
+      border-bottom-left-radius: 4px;
+      color: var(--color-ink-700);
+    }
+    .message.user .message-bubble {
+      background: var(--color-brand);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
 
     .typing-indicator {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 4px;
       padding: 12px 16px;
-      background: var(--bot-msg);
-      border: 1px solid var(--border);
+      background: var(--color-paper);
+      border: 1px solid var(--hairline);
       border-radius: var(--radius);
       border-bottom-left-radius: 4px;
       max-width: fit-content;
     }
-    .typing-dots { display: flex; gap: 4px; }
-    .typing-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: typing 1.4s infinite; }
+    .typing-dot { width: 6px; height: 6px; background: var(--color-ink-300); border-radius: 50%; animation: typing 1.4s infinite; }
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typing {
       0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-      30% { transform: translateY(-8px); opacity: 1; }
+      30% { transform: translateY(-6px); opacity: 1; }
     }
 
-    .input-area { padding: 16px 24px; background: var(--primary); border-top: 1px solid var(--border); }
+    .input-area {
+      padding: 14px 22px 18px;
+      background: var(--color-paper);
+      border-top: 1px solid var(--hairline);
+    }
 
-    .quick-actions { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .quick-actions { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 
     .quick-chip {
       padding: 6px 14px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--color-paper);
+      border: 1px solid var(--hairline);
       border-radius: 999px;
       font-size: 0.82rem;
       cursor: pointer;
       transition: all 0.2s;
-      color: rgba(255,255,255,0.8);
+      color: var(--color-ink-500);
       font-weight: 500;
       font-family: inherit;
     }
     .quick-chip:hover {
-      background: var(--accent);
-      color: var(--primary-dark);
-      border-color: var(--accent);
+      background: var(--color-brand);
+      color: #fff;
+      border-color: var(--color-brand);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .input-wrapper { display: flex; gap: 10px; align-items: flex-end; }
+    .input-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--color-paper-soft);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius);
+      padding: 6px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--color-brand);
+      box-shadow: 0 0 0 3px rgba(0,51,74,0.08);
+    }
 
     .input-field {
       flex: 1;
-      background: rgba(255,255,255,0.07);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius);
-      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      padding: 8px 10px;
       font-family: inherit;
       font-size: 0.95rem;
       resize: none;
-      min-height: 50px;
+      min-height: 38px;
       max-height: 200px;
-      transition: all 0.2s;
       outline: none;
-      color: white;
+      color: var(--color-ink);
+      line-height: 1.5;
     }
-    .input-field::placeholder { color: rgba(255,255,255,0.35); }
-    .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(175,208,55,0.15); }
+    .input-field::placeholder { color: var(--color-ink-400); }
 
     .send-button {
-      background: var(--accent);
-      color: var(--primary-dark);
+      background: var(--color-brand);
+      color: #fff;
       border: none;
-      border-radius: var(--radius);
-      padding: 14px 24px;
-      font-size: 0.95rem; font-weight: 700;
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
       display: flex; align-items: center; gap: 8px;
-      box-shadow: 0 4px 14px var(--accent-glow);
+      font-family: inherit;
+      position: relative;
     }
-    .send-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(175,208,55,0.45); }
-    .send-button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .send-button:hover:not(:disabled) {
+      background: var(--color-brand-600);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px -8px rgba(0,51,74,0.45);
+    }
+    .send-button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    .input-hint { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-top: 8px; text-align: center; }
+    .send-button .accent-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+    }
+
+    .input-hint {
+      font-size: 0.74rem;
+      color: var(--color-ink-400);
+      margin-top: 10px;
+      text-align: center;
+    }
 
     .welcome-message {
-      background: rgba(175,208,55,0.07);
-      border: 1px solid rgba(175,208,55,0.25);
+      background: var(--color-paper);
+      border: 1px solid var(--hairline);
       border-radius: var(--radius);
-      padding: 20px;
-      margin: 8px 0;
+      padding: 22px;
+      margin: 4px 0;
     }
-    .welcome-message h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.05rem; }
-    .welcome-message p { color: white; }
-    .welcome-message ul { list-style: none; padding-left: 0; }
-    .welcome-message li { padding: 6px 0; color: white; font-size: 0.93rem; }
-    .welcome-message li:before { content: "— "; color: var(--accent); font-weight: bold; }
+    .welcome-message .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-ink-400);
+      margin-bottom: 10px;
+    }
+    .welcome-message .eyebrow::before {
+      content: "";
+      width: 6px; height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+    }
+    .welcome-message h3 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      color: var(--color-ink);
+      font-size: 1.5rem;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .welcome-message h3 em {
+      color: var(--color-brand);
+      font-style: italic;
+    }
+    .welcome-message p { color: var(--color-ink-500); font-size: 0.95rem; line-height: 1.6; }
+
+    .brand-footer {
+      padding: 10px 24px 14px;
+      background: var(--color-paper);
+      border-top: 1px solid var(--hairline);
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--color-ink-400);
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .brand-footer strong {
+      color: var(--color-brand);
+      font-weight: 600;
+    }
 
     @media (max-width: 768px) {
       body { align-items: stretch; justify-content: flex-start; overflow: hidden; }
       .container { padding: 0; min-height: var(--app-vh); }
-      .chat-card { border-radius: 0; height: var(--app-vh); max-height: var(--app-vh); overflow: hidden; }
-      .chat-header { padding: calc(8px + env(safe-area-inset-top)) 14px 10px; position: sticky; top: 0; z-index: 30; }
-      .header-icon { width: 38px; height: 38px; font-size: 19px; border-radius: 10px; }
-      .header-info h1 { font-size: 1.02rem; }
-      .header-info p { font-size: 0.74rem; }
-      .new-session-btn { padding: 6px 10px; font-size: 0.75rem; }
-      .status-badge { padding: 5px 9px; font-size: 0.72rem; }
-      .messages-container { padding: 12px; min-height: 0; overflow-y: auto; padding-bottom: 170px; }
-      .message-bubble { max-width: 85%; }
-      .input-area { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -8px 20px rgba(0,0,0,0.08); border-top: 1px solid var(--border); }
+      .chat-card { border-radius: 0; border: none; height: var(--app-vh); max-height: var(--app-vh); overflow: hidden; }
+      .chat-header { padding: calc(10px + env(safe-area-inset-top)) 14px 12px; position: sticky; top: 0; z-index: 30; }
+      .header-icon { width: 36px; height: 36px; font-size: 12px; border-radius: 10px; }
+      .header-info h1 { font-size: 1.15rem; }
+      .header-info p { font-size: 0.72rem; }
+      .new-session-btn { padding: 5px 10px; font-size: 0.74rem; }
+      .status-badge { padding: 4px 9px; font-size: 0.7rem; }
+      .messages-container { padding: 14px; min-height: 0; overflow-y: auto; padding-bottom: 170px; }
+      .message-bubble { max-width: 86%; }
+      .input-area { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -8px 20px rgba(10,14,18,0.06); }
       .quick-actions { display: none !important; }
-      .input-field { min-height: 44px; max-height: 96px; padding: 10px 12px; }
-      .send-button { padding: 12px 14px; font-size: 0.88rem; }
+      .input-field { min-height: 38px; max-height: 96px; }
+      .send-button { padding: 9px 14px; font-size: 0.88rem; }
       .input-hint { display: none; }
     }
   </style>
@@ -275,15 +375,15 @@
         <div class="header-left">
           <div class="header-icon">AI</div>
           <div class="header-info">
-            <h1>SpoznajAI</h1>
-            <p>Asistent za informacije o storitvah</p>
+            <h1>Spoznaj AI</h1>
+            <p>Virtualni pomočnik · 10+ jezikov</p>
           </div>
         </div>
-        <div style="display:flex;gap:12px;align-items:center;">
-          <button class="new-session-btn" id="newSessionBtn">Nova seja</button>
+        <div class="header-actions">
+          <button class="new-session-btn" id="newSessionBtn">Nov pogovor</button>
           <div class="status-badge">
             <div class="status-dot"></div>
-            <span>Na voljo 24/7</span>
+            <span>v živo</span>
           </div>
         </div>
       </div>
@@ -292,11 +392,11 @@
 
       <div class="input-area">
         <div class="quick-actions">
-          <div class="quick-chip" data-prompt="Koliko stane chatbot?">Cene</div>
-          <div class="quick-chip" data-prompt="Kaj je vključeno v paketih?">Paketi</div>
-          <div class="quick-chip" data-prompt="Kako poteka postopek postavitve?">Postopek</div>
-          <div class="quick-chip" data-prompt="Katera so pogosta vprašanja?">FAQ</div>
-          <div class="quick-chip" data-prompt="Ali podpira slovenščino in narečja?">Jeziki</div>
+          <div class="quick-chip" data-prompt="Koliko stane virtualni pomočnik?">Cenik</div>
+          <div class="quick-chip" data-prompt="Kako deluje virtualni pomočnik?">Kako deluje</div>
+          <div class="quick-chip" data-prompt="Kako poteka postavitev?">Postavitev</div>
+          <div class="quick-chip" data-prompt="Za katere panoge je primeren?">Primeri</div>
+          <div class="quick-chip" data-prompt="V katerih jezikih odgovarja?">Jeziki</div>
           <div class="quick-chip" data-prompt="Kako vas kontaktiram?">Kontakt</div>
         </div>
         <div class="input-wrapper">
@@ -304,13 +404,17 @@
             class="input-field"
             id="messageInput"
             rows="1"
-            placeholder="Vprašajte karkoli o naših storitvah..."></textarea>
+            placeholder="Vprašajte karkoli o naših pomočnikih..."></textarea>
           <button class="send-button" id="sendButton">
+            <span class="accent-dot"></span>
             <span>Pošlji</span>
-            <span>→</span>
           </button>
         </div>
         <div class="input-hint">Enter = pošlji &nbsp;•&nbsp; Shift+Enter = nova vrstica</div>
+      </div>
+
+      <div class="brand-footer">
+        <strong>Spoznaj AI</strong>
       </div>
     </div>
   </div>
@@ -378,7 +482,7 @@
 
       const indicator = document.createElement('div');
       indicator.className = 'typing-indicator';
-      indicator.innerHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+      indicator.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
 
       div.appendChild(avatar);
       div.appendChild(indicator);
@@ -415,7 +519,6 @@
           return;
         }
 
-        // Ustvari bot sporočilo ki se polni sproti
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message bot';
         const avatar = document.createElement('div');
@@ -458,16 +561,15 @@
     function showWelcome() {
       messagesContainer.innerHTML = `
         <div class="welcome-message">
-          <h3>Pozdravljeni pri SpoznajAI</h3>
-          <p style="margin-bottom:12px;">Sem vaš AI asistent. Pomagam vam z informacijami o:</p>
-          <ul>
-            <li>Paketih in cenah naših storitev</li>
-            <li>Kako deluje AI virtualni asistent</li>
-            <li>Času postavitve in tehničnih podrobnostih</li>
-            <li>Kontaktu in brezplačni konzultaciji</li>
-          </ul>
-          <p style="margin-top:12px;font-size:0.9rem;color:var(--text-muted);">
-            Kliknite hitro akcijo spodaj ali preprosto napišite vprašanje.
+          <span class="eyebrow">Spoznaj AI · pomočnik</span>
+          <h3>Dobrodošli na <em>Spoznaj AI</em></h3>
+          <p>
+            Sem virtualni pomočnik in z veseljem odgovorim na vsa vaša vprašanja
+            o naših storitvah. Vprašajte me karkoli o ceniku, postavitvi, paketih
+            ali načinu delovanja.
+          </p>
+          <p style="margin-top:14px;font-size:0.86rem;color:var(--color-ink-400);">
+            Izberite hitro akcijo spodaj ali napišite vprašanje.
           </p>
         </div>
       `;
