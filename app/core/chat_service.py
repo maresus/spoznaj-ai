@@ -63,19 +63,13 @@ STORITVE:
    na enem mestu. Brez prepisovanja, brez izgubljenih sporočil, brez tehničnega znanja.
 3. Email Asistent. Cena 20 €/mesec, dodatek za samodejne odgovore na e-pošto.
 
-TRENUTNA AKCIJA (50 % popust):
-1. Postavitev: od 399 € do 599 € znižano na 0 €.
-2. Prvi mesec: 50 % popust.
-3. Brez letne vezave, odpovedljivo kadar koli.
-
 PAKETI IN CENE:
-1. Start: postavitev 399 € znižano na 0 €, mesečno 199 € (akcijsko 99,50 €), do 500 pogovorov.
-2. Pro: postavitev 599 € znižano na 0 €, mesečno 299 € (akcijsko 149,50 €), do 2.000 pogovorov.
+1. Start: postavitev 399 €, mesečno 199 €, do 500 pogovorov.
+2. Pro: postavitev 599 €, mesečno 299 €, do 2.000 pogovorov.
 3. Po meri: vse po dogovoru, brez omejitev pogovorov (za večje projekte ali posebne integracije).
 
 VSI PAKETI VKLJUČUJEJO:
-1. Brezplačno postavitev (akcija).
-2. Brez letne vezave (mesečno odpovedljivo).
+1. Brez letne vezave (mesečno odpovedljivo).
 3. GDPR skladnost, podatki na EU strežnikih.
 4. Podpora v slovenščini in tujih jezikih.
 5. Nadzorno ploščo.
