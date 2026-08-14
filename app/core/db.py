@@ -58,6 +58,19 @@ def get_messages(session_id: str) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def get_conversation_pairs(cutoff: str = "2000-01-01 00:00:00", limit: int = 1000) -> list[dict]:
+    with _conn() as con:
+        rows = con.execute("""
+            SELECT u.session_id, u.content AS user_message, a.content AS bot_response, u.ts AS created_at
+            FROM messages u
+            JOIN messages a ON a.id = u.id + 1 AND a.session_id = u.session_id AND a.role = 'assistant'
+            WHERE u.role = 'user' AND u.ts >= ?
+            ORDER BY u.id DESC
+            LIMIT ?
+        """, (cutoff, limit)).fetchall()
+    return [dict(r) for r in rows]
+
+
 def get_stats() -> dict:
     with _conn() as con:
         today = datetime.now().date().isoformat()
