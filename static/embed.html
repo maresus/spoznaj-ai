@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>SpoznajAI</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--brand:#0B3149;--accent:#A6CE39;--ink:#1a2330;--muted:#6b7a8d;--paper:#fff;--bot:#f0f4f8;--hair:#e0e8f0}
+    html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif;background:var(--paper);font-size:14px}
+    body{display:flex;flex-direction:column;position:relative}
+
+    /* header */
+    .eh{background:var(--brand);color:#fff;padding:9px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .eh-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+    .eh-name{font-size:13px;font-weight:600}
+    .eh-live{font-size:11px;color:rgba(255,255,255,.55);margin-left:auto}
+
+    /* messages */
+    .em{flex:1;overflow-y:auto;padding:12px 12px 4px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
+    .em-r{display:flex;max-width:100%}
+    .em-r.bot{justify-content:flex-start}
+    .em-r.usr{justify-content:flex-end}
+    .em-b{padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.5;max-width:84%;word-break:break-word}
+    .em-r.bot .em-b{background:var(--bot);color:var(--ink);border-bottom-left-radius:4px}
+    .em-r.usr .em-b{background:var(--brand);color:#fff;border-bottom-right-radius:4px}
+    .em-r.bot .em-b strong{font-weight:600}
+
+    /* typing */
+    .typ{display:flex;gap:4px;padding:10px 12px;background:var(--bot);border-radius:14px;border-bottom-left-radius:4px;width:fit-content}
+    .typ span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:tb 1.2s infinite}
+    .typ span:nth-child(2){animation-delay:.2s}
+    .typ span:nth-child(3){animation-delay:.4s}
+    @keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+
+    /* chips */
+    .ec{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 6px;flex-shrink:0}
+    .ec button{background:var(--paper);border:1px solid var(--hair);color:var(--ink);border-radius:100px;padding:5px 12px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit}
+    .ec button:hover{background:var(--bot);border-color:var(--brand);color:var(--brand)}
+
+    /* input */
+    .ei{flex-shrink:0;padding:8px 10px 6px;border-top:1px solid var(--hair)}
+    .ei-row{display:flex;gap:8px;align-items:flex-end}
+    .ei-inp{flex:1;border:1px solid var(--hair);border-radius:10px;padding:9px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;line-height:1.4;max-height:80px;overflow-y:auto;color:var(--ink)}
+    .ei-inp:focus{border-color:var(--brand)}
+    .ei-send{width:36px;height:36px;background:var(--brand);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+    .ei-send:hover{background:#0d3d5f}
+    .ei-send:disabled{background:#bbb;cursor:not-allowed}
+
+    /* inquiry bar */
+    .inq-bar{padding:6px 10px 8px;flex-shrink:0}
+    .inq-bar button{width:100%;background:var(--accent);color:var(--ink);border:none;border-radius:8px;padding:9px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;font-family:inherit}
+    .inq-bar button:hover{opacity:.88}
+
+    /* inquiry overlay */
+    .inq-ov{display:none;position:absolute;inset:0;background:#fff;flex-direction:column;z-index:10}
+    .inq-ov.open{display:flex}
+    .inq-head{background:var(--brand);color:#fff;padding:11px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+    .inq-head b{flex:1;font-size:14px}
+    .inq-back{background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;font-family:inherit}
+    .inq-scroll{flex:1;overflow-y:auto;padding:14px 16px}
+    .inq-scroll label{display:block;font-size:12px;color:#555;margin:12px 0 4px}
+    .inq-scroll label span{color:#c00}
+    .inq-scroll input,.inq-scroll select,.inq-scroll textarea{width:100%;border:1px solid #d0d8e0;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;outline:none}
+    .inq-scroll input:focus,.inq-scroll select:focus,.inq-scroll textarea:focus{border-color:var(--brand)}
+    .inq-scroll textarea{resize:none;height:70px}
+    .inq-sub{width:100%;margin-top:14px;background:var(--brand);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit}
+    .inq-sub:disabled{background:#aaa;cursor:not-allowed}
+    .inq-ok{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:24px;text-align:center}
+    .inq-ok.show{display:flex}
+    .inq-ok h4{color:var(--brand);font-size:1.1rem;margin:10px 0 6px}
+    .inq-ok p{color:#666;font-size:.85rem;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="eh">
+    <div class="eh-dot"></div>
+    <span class="eh-name">Pomočnik SpoznajAI</span>
+    <span class="eh-live">na voljo zdaj</span>
+  </div>
+
+  <div class="em" id="msgs"></div>
+
+  <div class="ec" id="chips">
+    <button data-p="Koliko stane?">Cenik</button>
+    <button data-p="Kako poteka postavitev?">Postavitev</button>
+    <button data-p="Pokažite mi primere iz prakse.">Primeri</button>
+    <button data-p="Kako vas kontaktiram?">Kontakt</button>
+  </div>
+
+  <div class="ei">
+    <div class="ei-row">
+      <textarea class="ei-inp" id="inp" rows="1" placeholder="Vprašajte karkoli..."></textarea>
+      <button class="ei-send" id="send" aria-label="Pošlji">→</button>
+    </div>
+  </div>
+
+  <div class="inq-bar">
+    <button id="inqBtn">Pošlji povpraševanje</button>
+  </div>
+
+  <div class="inq-ov" id="inqOv">
+    <div class="inq-head">
+      <b>Povpraševanje</b>
+      <button class="inq-back" id="inqBack">← Nazaj</button>
+    </div>
+    <div class="inq-scroll" id="inqScroll">
+      <label>Ime in priimek <span>*</span></label>
+      <input type="text" id="f-ime" placeholder="Janez Novak">
+      <label>Telefon <span>*</span></label>
+      <input type="tel" id="f-tel" placeholder="+386 ...">
+      <label>E-pošta <span>*</span></label>
+      <input type="email" id="f-email" placeholder="janez@podjetje.si">
+      <label>Kaj vas zanima?</label>
+      <select id="f-zan">
+        <option value="">— izberite —</option>
+        <option>AI pomočnik (chatbot)</option>
+        <option>Avtomatizacija procesov</option>
+        <option>Glasovni AI agent</option>
+        <option>Še ne vem, svetujte mi</option>
+      </select>
+      <label>Sporočilo (neobvezno)</label>
+      <textarea id="f-msg" placeholder="Kratko opišite vaš izziv..."></textarea>
+      <button class="inq-sub" id="inqSub">POŠLJI POVPRAŠEVANJE</button>
+    </div>
+    <div class="inq-ok" id="inqOk">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#A6CE39"/><path d="M13 25l8 8 14-16" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h4>Hvala!</h4>
+      <p>Prejeli smo vaše povpraševanje.<br>Odgovorimo v enem delovnem dnevu.</p>
+    </div>
+  </div>
+
+  <script>
+    var sid = sessionStorage.getItem('sai_e_sid') || (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+    sessionStorage.setItem('sai_e_sid', sid);
+
+    var msgsEl = document.getElementById('msgs');
+    var inpEl  = document.getElementById('inp');
+    var sendEl = document.getElementById('send');
+    var chipsEl = document.getElementById('chips');
+
+    function fmt(t) {
+      return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+              .replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+    }
+    function addMsg(text, role) {
+      var r = document.createElement('div'); r.className = 'em-r ' + role;
+      var b = document.createElement('div'); b.className = 'em-b';
+      b.innerHTML = fmt(text);
+      r.appendChild(b); msgsEl.appendChild(r);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+      return b;
+    }
+    function showTyping() {
+      var r = document.createElement('div'); r.className = 'em-r bot'; r.id = 'typing';
+      var t = document.createElement('div'); t.className = 'em-b typ';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      r.appendChild(t); msgsEl.appendChild(r);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+    }
+    function hideTyping() { var t = document.getElementById('typing'); if (t) t.remove(); }
+
+    async function send(text) {
+      text = (text || '').trim();
+      if (!text) return;
+      chipsEl.style.display = 'none';
+      addMsg(text, 'usr');
+      inpEl.value = '';
+      sendEl.disabled = true;
+      showTyping();
+      try {
+        var r = await fetch('/chat/stream', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({message: text, session_id: sid})
+        });
+        hideTyping();
+        if (!r.ok) { addMsg('Napaka. Pišite na info@spoznaj-ai.si', 'bot'); return; }
+        var bub = addMsg('', 'bot');
+        var reader = r.body.getReader();
+        var dec = new TextDecoder();
+        var full = '';
+        while (true) {
+          var chunk = await reader.read();
+          if (chunk.done) break;
+          full += dec.decode(chunk.value, {stream: true});
+          bub.innerHTML = fmt(full);
+          msgsEl.scrollTop = msgsEl.scrollHeight;
+        }
+        if (!full.trim()) bub.textContent = 'Ni odgovora.';
+      } catch(e) {
+        hideTyping();
+        addMsg('Napaka pri povezavi.', 'bot');
+      } finally {
+        sendEl.disabled = false;
+      }
+    }
+
+    sendEl.addEventListener('click', function() { send(inpEl.value); });
+    inpEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(inpEl.value); }
+    });
+    inpEl.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+    });
+    document.querySelectorAll('.ec button').forEach(function(c) {
+      c.addEventListener('click', function() { send(c.getAttribute('data-p')); });
+    });
+
+    // inquiry
+    var inqOv = document.getElementById('inqOv');
+    document.getElementById('inqBtn').addEventListener('click', function() { inqOv.classList.add('open'); });
+    document.getElementById('inqBack').addEventListener('click', function() { inqOv.classList.remove('open'); });
+    document.getElementById('inqSub').addEventListener('click', async function() {
+      var ime   = document.getElementById('f-ime').value.trim();
+      var tel   = document.getElementById('f-tel').value.trim();
+      var email = document.getElementById('f-email').value.trim();
+      if (!ime || !tel || !email) { alert('Izpolnite vsa obvezna polja (*).'); return; }
+      var btn = document.getElementById('inqSub');
+      btn.disabled = true; btn.textContent = 'Pošiljam...';
+      try {
+        var res = await fetch('/chat/inquiry', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            ime: ime, telefon: tel, email: email,
+            zanima: document.getElementById('f-zan').value || null,
+            sporocilo: document.getElementById('f-msg').value.trim() || null
+          })
+        });
+        if (!res.ok) throw new Error();
+        document.getElementById('inqScroll').style.display = 'none';
+        document.getElementById('inqOk').classList.add('show');
+      } catch(e) {
+        alert('Napaka. Pišite na info@spoznaj-ai.si');
+        btn.disabled = false; btn.textContent = 'POŠLJI POVPRAŠEVANJE';
+      }
+    });
+
+    // welcome
+    addMsg('Pozdravljeni! Sem pomočnik SpoznajAI. Vprašajte me karkoli o naših storitvah in cenah.', 'bot');
+  </script>
+</body>
+</html>

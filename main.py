@@ -6,9 +6,9 @@ from email.mime.text import MIMEText
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Query, BackgroundTasks
+from fastapi import FastAPI, Query, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -38,6 +38,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def iframe_headers(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path == "/embed":
+        response.headers["Content-Security-Policy"] = "frame-ancestors *"
+        response.headers.pop("x-frame-options", None)
+    return response
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -98,6 +106,26 @@ def widget_ui() -> HTMLResponse:
     if not html_path.exists():
         return HTMLResponse("<h1>widget.html ni najden</h1>", status_code=500)
     return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
+
+
+@app.get("/embed", response_class=HTMLResponse)
+def embed_ui() -> HTMLResponse:
+    html_path = Path("static/embed.html")
+    if not html_path.exists():
+        return HTMLResponse("<h1>embed.html ni najden</h1>", status_code=500)
+    return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
+
+
+@app.get("/widget.js")
+def serve_widget_js() -> Response:
+    js_path = Path("static/widget.js")
+    if not js_path.exists():
+        return Response("// widget.js not found", media_type="application/javascript", status_code=404)
+    return Response(
+        content=js_path.read_text(encoding="utf-8"),
+        media_type="application/javascript",
+        headers={"Cache-Control": "public, max-age=300"},
+    )
 
 
 @app.post("/chat/", response_model=ChatResponse)
