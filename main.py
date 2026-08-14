@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -69,7 +69,7 @@ def _send_email(to: str, subject: str, html: str) -> bool:
         msg["From"] = FROM_EMAIL
         msg["To"] = to
         msg.attach(MIMEText(html, "html", "utf-8"))
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as s:
             s.starttls()
             s.login(SMTP_USER, SMTP_PASS)
             s.sendmail(FROM_EMAIL, to, msg.as_string())
@@ -112,7 +112,7 @@ def chat_stream(req: ChatRequest) -> StreamingResponse:
 
 
 @app.post("/chat/inquiry")
-def submit_inquiry(payload: InquiryRequest):
+def submit_inquiry(payload: InquiryRequest, bg: BackgroundTasks):
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     _inquiries.append({
         "ime": payload.ime, "telefon": payload.telefon, "email": payload.email,
@@ -138,7 +138,7 @@ def submit_inquiry(payload: InquiryRequest):
       </table>
     </div>
     </body></html>"""
-    _send_email(ADMIN_EMAIL, f"Povpraševanje SpoznajAI: {payload.ime}", admin_html)
+    bg.add_task(_send_email, ADMIN_EMAIL, f"Povpraševanje SpoznajAI: {payload.ime}", admin_html)
 
     confirm_html = f"""
     <html><body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
@@ -157,7 +157,7 @@ def submit_inquiry(payload: InquiryRequest):
       <p style="color:#999;font-size:12px;">spoznaj-ai.si</p>
     </div>
     </body></html>"""
-    _send_email(payload.email, "Potrditev povpraševanja — SpoznajAI", confirm_html)
+    bg.add_task(_send_email, payload.email, "Potrditev povpraševanja — SpoznajAI", confirm_html)
 
     return {"ok": True}
 
