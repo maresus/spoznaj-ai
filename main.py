@@ -39,13 +39,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.middleware("http")
-async def iframe_headers(request: Request, call_next):
-    response = await call_next(request)
-    if request.url.path == "/embed":
-        response.headers["Content-Security-Policy"] = "frame-ancestors *"
-        response.headers.pop("x-frame-options", None)
-    return response
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -113,7 +106,10 @@ def embed_ui() -> HTMLResponse:
     html_path = Path("static/embed.html")
     if not html_path.exists():
         return HTMLResponse("<h1>embed.html ni najden</h1>", status_code=500)
-    return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
+    return HTMLResponse(
+        content=html_path.read_text(encoding="utf-8"),
+        headers={"Content-Security-Policy": "frame-ancestors *"},
+    )
 
 
 @app.get("/widget.js")
