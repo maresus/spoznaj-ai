@@ -10,12 +10,6 @@
     html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif;background:var(--paper);font-size:14px}
     body{display:flex;flex-direction:column;position:relative}
 
-    /* header */
-    .eh{background:var(--brand);color:#fff;padding:9px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0}
-    .eh-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
-    .eh-name{font-size:13px;font-weight:600}
-    .eh-live{font-size:11px;color:rgba(255,255,255,.55);margin-left:auto}
-
     /* messages */
     .em{flex:1;overflow-y:auto;padding:12px 12px 4px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
     .em-r{display:flex;max-width:100%}
@@ -52,6 +46,11 @@
     .inq-bar button{width:100%;background:var(--accent);color:var(--ink);border:none;border-radius:8px;padding:9px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;font-family:inherit}
     .inq-bar button:hover{opacity:.88}
 
+    /* privacy footer */
+    .priv{text-align:center;padding:3px 10px 5px;flex-shrink:0}
+    .priv a{font-size:10px;color:var(--muted);text-decoration:none}
+    .priv a:hover{text-decoration:underline}
+
     /* inquiry overlay */
     .inq-ov{display:none;position:absolute;inset:0;background:#fff;flex-direction:column;z-index:10}
     .inq-ov.open{display:flex}
@@ -73,12 +72,6 @@
   </style>
 </head>
 <body>
-  <div class="eh">
-    <div class="eh-dot"></div>
-    <span class="eh-name">Pomočnik SpoznajAI</span>
-    <span class="eh-live">na voljo zdaj</span>
-  </div>
-
   <div class="em" id="msgs"></div>
 
   <div class="ec" id="chips">
@@ -94,6 +87,8 @@
       <button class="ei-send" id="send" aria-label="Pošlji">→</button>
     </div>
   </div>
+
+  <div class="priv"><a href="https://spoznaj-ai.si/politika-zasebnosti.html" target="_blank" rel="noopener">Politika zasebnosti</a></div>
 
   <div class="inq-bar">
     <button id="inqBtn">Pošlji povpraševanje</button>
@@ -237,7 +232,7 @@
     });
 
     // welcome
-    addMsg('Pozdravljeni! Sem pomočnik SpoznajAI. Vprašajte me karkoli o naših storitvah in cenah.', 'bot');
+    addMsg('Pozdravljeni! Sem AI pomočnik SpoznajAI — odgovarjam samodejno in nisem živa oseba. Vprašajte me karkoli o naših storitvah in cenah.', 'bot');
   </script>
 </body>
 </html>

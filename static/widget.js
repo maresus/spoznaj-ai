@@ -15,11 +15,10 @@
   var BASE   = me ? me.src.replace(/\/widget\.js[^]*$/, '') : '';
   var COLOR  = (me && me.getAttribute('data-color'))     || '#0B3149';
   var ACCENT = (me && me.getAttribute('data-accent'))    || '#A6CE39';
-  var GRAW   = (me && me.getAttribute('data-greetings')) || 'Pozdravljeni 👋|Sem pomočnik SpoznajAI.|Kako vam lahko pomagam?';
+  var GRAW   = (me && me.getAttribute('data-greetings')) || 'Pozdravljeni 👋|Sem AI pomočnik SpoznajAI — odgovarjam samodejno, nisem živa oseba.|Kako vam lahko pomagam?';
   var GS     = GRAW.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
-  GS.push('Feel free to write in any language | Schreiben Sie in jeder Sprache!');
   var EURL   = (me && me.getAttribute('data-url'))       || (BASE + '/embed');
-  var NAME   = (me && me.getAttribute('data-name'))      || 'Pomočnik SpoznajAI';
+  var NAME   = (me && me.getAttribute('data-name'))      || 'AI pomočnik SpoznajAI';
   var BKEY   = 'sai_w_b';
 
   var isOpen = false;
