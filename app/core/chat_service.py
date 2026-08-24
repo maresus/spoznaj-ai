@@ -170,9 +170,7 @@ def stream_reply(session_id: str, user_message: str):
     _DAYS_SL = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
     _now = datetime.now()
     _system = SYSTEM_PROMPT + (
-        f"
-
-Danes je {_DAYS_SL[_now.weekday()]}, {_now.strftime('%-d. %-m. %Y')}. "
+        f"\n\nDanes je {_DAYS_SL[_now.weekday()]}, {_now.strftime('%-d. %-m. %Y')}. "
         f"Jutri je {_DAYS_SL[(_now.weekday()+1)%7]}."
     )
     messages = [{"role": "system", "content": _system}] + history
@@ -226,3 +224,4 @@ def get_reply(session_id: str, user_message: str) -> str:
         _sessions[session_id] = history[-20:]
 
     return reply
+
