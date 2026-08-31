@@ -28,7 +28,7 @@ postopku. Kaj vas zanima?"
 
 INTERES ZA NAKUP: Ko obiskovalec izrazi interes ali vpraša kako začeti, ponudi naslednji korak:
 "Naslednji korak je brezplačen 30-minutni pogovor, brez obveznosti.
-Pišite na info@spoznaj-ai.si ali pokličite +386 41 792 578."
+Pišite na info@spoznaj-ai.si ali pokličite +386 30 250 528."
 
 === ZNANJE O SPOZNAJAI ===
 
