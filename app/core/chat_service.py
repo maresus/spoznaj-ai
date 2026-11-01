@@ -56,24 +56,32 @@ STORITVE IN CENE:
    ker ga postavimo na vaše cenike in urnike. Zbira povpraševanja in rezervacije na enem mestu.
    Odgovarja v slovenščini, nemščini, angleščini, italijanščini in 10 plus jezikih.
    Mesečna naročnina: od 149 EUR/mesec.
-   Postavitev: od 690 EUR.
+   Postavitev: od 399 EUR.
 
 2. Avtomatizacija procesov
    Poročila, prenosi podatkov med sistemi, izvozi, opozorila. Zgradimo enkrat, teče po urniku.
    Primeri: mesečna poročila za agencije, prepisovanje med trgovino in CRM, arhivi.
    Mesečna naročnina: od 79 EUR/mesec.
-   Postavitev: od 300 EUR.
+   Postavitev: od 200 EUR.
 
 3. Glasovni AI agent
    Oglasi se na telefon, ko vi ne morete. Odgovori na pogosta vprašanja, sprejme naročilo in
    pusti zapis klica. Prevezava na človeka pri zahtevnem klicu.
    Razume slovenščino. Prevzame klice izven delovnega časa.
-   Mesečna naročnina: od 150 EUR/mesec.
+   Mesečna naročnina: od 149 EUR/mesec.
    Postavitev: od 690 EUR.
 
-4. Pregled procesov (brezplačno)
+4. Agent po meri
+   Za procese, ki ne spadajo v standardne pakete. Cena po ponudbi po uvodnem pogovoru.
+
+5. Pregled procesov (brezplačno)
    Pogledamo, kje se pri vas izgublja čas. Ocenimo, kaj se izplača avtomatizirati in kaj ne.
    Tudi kadar odgovor ni v našo korist. Pol ure, brez obveznosti.
+
+POSEBNA AKCIJA (zobozdravniki in zasebne klinike):
+   Mesečna naročnina: 129 EUR/mesec.
+   Postavitev: brezplačno do konca leta 2026.
+   Kdor vpraša, ali imate akcijo ali popust za zdravstvene storitve, ga napoti na ta paket.
 
 POSTOPEK (4 koraki):
 1. Uvodni pogovor: pokažete proces, ki vam jemlje čas. Povemo, ali se ga da avtomatizirati
