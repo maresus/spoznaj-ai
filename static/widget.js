@@ -15,7 +15,7 @@
   var BASE   = me ? me.src.replace(/\/widget\.js[^]*$/, '') : '';
   var COLOR  = (me && me.getAttribute('data-color'))     || '#0B3149';
   var ACCENT = (me && me.getAttribute('data-accent'))    || '#A6CE39';
-  var GRAW   = (me && me.getAttribute('data-greetings')) || 'Pozdravljeni 👋|Sem AI pomočnik SpoznajAI — odgovarjam samodejno, nisem živa oseba.|Kako vam lahko pomagam?';
+  var GRAW   = (me && me.getAttribute('data-greetings')) || 'Pozdravljeni!|Sem AI pomočnik **SpoznajAI** — odgovarjam samodejno, nisem živa oseba.\n\nPomagam z:\n- AI pomočniki za spletne strani\n- avtomatizacijo procesov\n- glasovnimi agenti\n\nKaj vas zanima?';
   var GS     = GRAW.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
   var EURL   = (me && me.getAttribute('data-url'))       || (BASE + '/embed');
   var NAME   = (me && me.getAttribute('data-name'))      || 'AI pomočnik SpoznajAI';
@@ -104,7 +104,7 @@
   var bels = GS.map(function (txt) {
     var b = document.createElement('div');
     b.className = 'sai-w-b';
-    b.textContent = txt;
+    b.innerHTML = txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n- /g,'<br>• ').replace(/\n/g,'<br>');
     bub.appendChild(b);
     return b;
   });
